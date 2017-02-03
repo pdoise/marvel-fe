@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription }      from 'rxjs/Subscription'
+import { Angular2Apollo }    from 'angular2-apollo'
 import { Hero } from './hero';
-import { HeroService } from './hero.service';
+import { heroes } from './hero.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,23 +12,33 @@ import { Router } from '@angular/router';
 })
 
 export class HeroesComponent implements OnInit {
-  heroes: Hero[];
-  selectedHero: Hero;
+  selectedHero :Hero;
+  heroes :any;
+  loading  :boolean = true
+  private sub: Subscription
 
   constructor(
-  	private heroService: HeroService,
+    private apollo: Angular2Apollo,
   	private router: Router) { }
 
-  getHeroes(): void {
-    this.heroService.getHeroes().then(heroes => this.heroes = heroes);
-  }
-  ngOnInit(): void {
-    this.getHeroes();
+  ngOnInit() {
+    this.sub = this.apollo.watchQuery(
+      {
+        query: heroes,
+      }
+    ).subscribe(({data, loading}) => {
+      this.heroes = data["superheros"]
+      this.loading = loading
+    })
   }
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
   }
   gotoDetail(): void {
     this.router.navigate(['/detail', this.selectedHero.id]);
+  }
+
+  public ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 }

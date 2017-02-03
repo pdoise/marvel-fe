@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription }      from 'rxjs/Subscription'
+import { Angular2Apollo }    from 'angular2-apollo'
 
 import { Hero } from '../heroes/hero';
-import { HeroService } from '../heroes/hero.service';
+import { heroes } from '../heroes/hero.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,12 +13,24 @@ import { HeroService } from '../heroes/hero.service';
 
 export class DashboardComponent implements OnInit {
 
-  heroes: Hero[] = [];
+  heroes :any;
+  loading  :boolean = true
+  private sub: Subscription
 
-  constructor(private heroService: HeroService) { }
+  constructor(private apollo: Angular2Apollo) { }
 
-  ngOnInit(): void {
-    this.heroService.getHeroes()
-      .then(heroes => this.heroes = heroes.slice(1, 5));
+  ngOnInit() {
+    this.sub = this.apollo.watchQuery(
+      {
+        query: heroes,
+      }
+    ).subscribe(({data, loading}) => {
+      this.heroes = data["superheros"].slice(0, 4)
+      this.loading = loading
+    })
+  }
+
+  public ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 }

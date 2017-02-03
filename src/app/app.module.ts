@@ -2,6 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { ApolloModule }    from 'angular2-apollo'
+import { provideClient }   from './apollo';
+
 import { AppComponent } from './app.component';
 import { HeroDetailComponent } from './heroes/hero-detail/hero-detail.component';
 import { HeroService } from './heroes/hero.service';
@@ -20,7 +23,8 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ApolloModule.withClient(provideClient)
   ],
   providers: [HeroService],
   bootstrap: [AppComponent]
