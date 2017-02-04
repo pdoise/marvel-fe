@@ -43,9 +43,11 @@ export class SupergroupShowComponent {
     this.apollo.watchQuery(
       {
         query: supergroup,
+        pollInterval: 20000,
         variables: {
           id: this.id
-        }
+        },
+        forceFetch: true,
       }
     ).subscribe(({data, loading}) => {
       this.supergroup = data["supergroup"]
@@ -63,6 +65,7 @@ export class SupergroupShowComponent {
       }
     }).subscribe(({ data }) => {
       console.log('got data', data);
+      this.ngOnInit() //<!-- lazy hack
     }),
       error => {
       console.log('there was an error sending the query', error);
