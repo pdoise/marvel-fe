@@ -8,6 +8,10 @@ export const supergroup = gql`
       name
       leader
       location
+      superheroes {
+        id
+        name
+      }
     }
   }
 `

@@ -7,15 +7,17 @@ import { provideClient }   from './apollo';
 
 import { AppComponent } from './app.component';
 import { HeroesComponent } from './heroes/heroes.component';
-
-import { AppRoutingModule } from './app-routing.module';
+import { HeroShowComponent } from './heroes/show/hero-show.component';
 import { SupergroupsComponent } from './supergroups/supergroups.component';
 import { SupergroupShowComponent } from './supergroups/show/supergroup-show.component';
+
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeroesComponent,
+    HeroShowComponent,
     SupergroupsComponent,
     SupergroupShowComponent
   ],

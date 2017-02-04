@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription }      from 'rxjs/Subscription'
 import { Angular2Apollo }    from 'angular2-apollo'
 
-import { Hero } from '../heroes/hero';
 import { supergroups } from './supergroups.model';
 
 @Component({

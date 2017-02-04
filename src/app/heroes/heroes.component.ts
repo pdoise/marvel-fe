@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription }      from 'rxjs/Subscription'
 import { Angular2Apollo }    from 'angular2-apollo'
-import { Hero } from './hero';
 import { heroes } from './hero.model';
 import { Router } from '@angular/router';
 
@@ -12,7 +11,6 @@ import { Router } from '@angular/router';
 })
 
 export class HeroesComponent implements OnInit {
-  selectedHero :Hero;
   heroes :any;
   loading  :boolean = true
   private sub: Subscription
@@ -31,11 +29,9 @@ export class HeroesComponent implements OnInit {
       this.loading = loading
     })
   }
-  onSelect(hero: Hero): void {
-    this.selectedHero = hero;
-  }
-  gotoDetail(): void {
-    this.router.navigate(['/detail', this.selectedHero.id]);
+
+  gotoDetail(hero: any): void {
+    this.router.navigate(['/hero', hero.id]);
   }
 
   public ngOnDestroy(): void {

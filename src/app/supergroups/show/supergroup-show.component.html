@@ -1,10 +1,14 @@
 <div *ngIf="supergroup">
-  <h2>{{supergroup.name}} details!</h2>
-  <div>
-    <label>id: </label>{{supergroup.id}}</div>
-  <div>
-    <label>name: </label>
-    <input [(ngModel)]="supergroup.name" placeholder="name" />
-  </div>
+  <h1>{{supergroup.name}} Deatils Page</h1>
+  <p><strong>Leader:</strong> {{supergroup.leader}}</p>
+  <p><strong>Location:</strong> {{supergroup.location}}</p>
+
+  <h2>Heroes:</h2>
+  <ul class="heroes">
+    <li *ngFor="let hero of supergroup.superheroes">
+      <span class="badge">{{hero.id}}</span> {{hero.name}}
+    </li>
+  </ul>
+  
   <button (click)="goBack()">Back</button>
 </div>
