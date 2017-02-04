@@ -3,17 +3,16 @@ import { Subscription }      from 'rxjs/Subscription'
 import { Angular2Apollo }    from 'angular2-apollo'
 
 import { Hero } from '../heroes/hero';
-import { heroes } from '../heroes/hero.model';
+import { supergroups } from './supergroups.model';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  selector: 'app-supergroups',
+  templateUrl: './supergroups.component.html',
+  styleUrls: ['./supergroups.component.css']
 })
+export class SupergroupsComponent implements OnInit {
 
-export class DashboardComponent implements OnInit {
-
-  heroes :any;
+  supergroups :any;
   loading  :boolean = true
   private sub: Subscription
 
@@ -22,10 +21,10 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.sub = this.apollo.watchQuery(
       {
-        query: heroes,
+        query: supergroups,
       }
     ).subscribe(({data, loading}) => {
-      this.heroes = data["superheros"].slice(0, 4)
+      this.supergroups = data["supergroups"]
       this.loading = loading
     })
   }
@@ -33,4 +32,5 @@ export class DashboardComponent implements OnInit {
   public ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
+
 }

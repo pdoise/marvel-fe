@@ -1,13 +1,13 @@
 import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent }   from './dashboard/dashboard.component';
+import { SupergroupsComponent } from './supergroups/supergroups.component';
+import { SupergroupShowComponent } from './supergroups/show/supergroup-show.component';
 import { HeroesComponent }      from './heroes/heroes.component';
-import { HeroDetailComponent }  from './heroes/hero-detail/hero-detail.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard',  component: DashboardComponent },
-  { path: 'detail/:id', component: HeroDetailComponent },
+  { path: '', redirectTo: '/supergroups', pathMatch: 'full' },
+  { path: 'supergroups',  component: SupergroupsComponent },
+  { path: 'supergroup/:id',  component: SupergroupShowComponent },
   { path: 'heroes',     component: HeroesComponent }
 ];
 

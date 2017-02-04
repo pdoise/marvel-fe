@@ -6,19 +6,18 @@ import { ApolloModule }    from 'angular2-apollo'
 import { provideClient }   from './apollo';
 
 import { AppComponent } from './app.component';
-import { HeroDetailComponent } from './heroes/hero-detail/hero-detail.component';
-import { HeroService } from './heroes/hero.service';
 import { HeroesComponent } from './heroes/heroes.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 
 import { AppRoutingModule } from './app-routing.module';
+import { SupergroupsComponent } from './supergroups/supergroups.component';
+import { SupergroupShowComponent } from './supergroups/show/supergroup-show.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeroDetailComponent,
     HeroesComponent,
-    DashboardComponent
+    SupergroupsComponent,
+    SupergroupShowComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +25,7 @@ import { AppRoutingModule } from './app-routing.module';
     AppRoutingModule,
     ApolloModule.withClient(provideClient)
   ],
-  providers: [HeroService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
