@@ -26,12 +26,10 @@ export const supergroups = gql`
 `
 
 //new
-export const submitHero = gql`
-  mutation submitHero($name: String!, $alias: String!, $supergroup_id: ID) {
-    createHero(name: $name, alias: $alias, supergroup_id: $supergroup_id) {
-      name
-      alias
-      supergroup_id
+export const createHero = gql`
+  mutation createHero($name: String!, $alias: String!, $supergroup_id: Int!) {
+    createHero(input: {name: $name, alias: $alias, supergroup_id: $supergroup_id}) {
+      hero { id }
     }
   }
 `;

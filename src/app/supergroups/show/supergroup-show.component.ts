@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription }      from 'rxjs/Subscription'
 import { Angular2Apollo }    from 'angular2-apollo'
 
-import { supergroup, submitHero } from '../supergroups.model';
+import { supergroup, createHero } from '../supergroups.model';
 
 import 'rxjs/add/operator/switchMap';
 
@@ -53,13 +53,13 @@ export class SupergroupShowComponent {
     })
   }
 
-  saveHero() {
+  createHero() {
     this.apollo.mutate({
-      mutation: submitHero,
+      mutation: createHero,
       variables: {
         name: this.hero.name,
         alias: this.hero.alias,
-        supergroup_id: 5
+        supergroup_id: this.id,
       }
     }).subscribe(({ data }) => {
       console.log('got data', data);
