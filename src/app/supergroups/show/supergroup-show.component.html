@@ -5,10 +5,62 @@
 
   <h2>Heroes:</h2>
   <ul class="heroes">
-    <li *ngFor="let hero of supergroup.superheroes">
-      <span class="badge">{{hero.id}}</span> {{hero.name}}
+    <li *ngFor="let hero of supergroup.heroes">
+      <span class="badge">{{hero.id}}</span> {{hero.alias}}
     </li>
   </ul>
   
   <button (click)="goBack()">Back</button>
+</div>
+
+<div>
+  <h2>Add New Hero</h2>
+
+  <form novalidate
+    [formGroup]="heroForm" 
+    (ngSubmit)="saveHero(hero)">
+    <!-- Name -->
+    <div 
+      class="form-group" 
+      [ngClass]="{'has-danger':!heroForm.controls['name'].valid && heroForm.controls['name'].touched}">
+      <input 
+        class="form-control"
+        placeholder="Name" 
+        type="text" 
+        id="name"
+        [formControl]="heroForm.controls['name']"
+        [(ngModel)]="hero.name"
+        ngModel
+        required>
+        <div 
+          class="form-control-feedback"
+          *ngIf="heroForm.controls['name'].hasError('required') && heroForm.controls['name'].touched">Email is required.
+        </div>
+    </div><br>
+    <!-- Alias -->
+    <div 
+      class="form-group" 
+      [ngClass]="{'has-danger':!heroForm.controls['alias'].valid && heroForm.controls['alias'].touched}">
+      <input 
+        class="form-control"
+        placeholder="Alias" 
+        type="alias" 
+        id="alias"
+        [formControl]="heroForm.controls['alias']"
+        [(ngModel)]="hero.alias"
+        required>
+        <div 
+          class="form-control-feedback"
+          *ngIf="heroForm.controls['alias'].hasError('required') && heroForm.controls['alias'].touched">Alias is required.
+        </div>
+    </div>
+    <!-- Submit -->
+    <div class="form-group">
+      <button 
+        type="submit" 
+        class="btn btn-login"
+        [disabled]="!heroForm.valid">Save
+      </button>
+    </div>
+  </form>
 </div>

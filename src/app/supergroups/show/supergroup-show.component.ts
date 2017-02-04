@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Params }   from '@angular/router';
 import { Location }                 from '@angular/common';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription }      from 'rxjs/Subscription'
 import { Angular2Apollo }    from 'angular2-apollo'
 
-import { supergroup } from '../supergroups.model';
+import { supergroup, submitHero } from '../supergroups.model';
 
 import 'rxjs/add/operator/switchMap';
 
@@ -16,15 +17,22 @@ import 'rxjs/add/operator/switchMap';
 
 export class SupergroupShowComponent {
   supergroup :any;
+  hero :any = {};
   loading  :boolean = true
   private sub :Subscription
   private id :number
+  private heroForm : FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private apollo: Angular2Apollo,
-    private location: Location
-  ) {}
+    private location: Location,
+    private __fb: FormBuilder) {
+      this.heroForm = __fb.group({
+        'name' : [null, Validators.required],
+        'alias': [null, Validators.required]
+      }) 
+  }
 
   ngOnInit() {
 
@@ -43,6 +51,22 @@ export class SupergroupShowComponent {
       this.supergroup = data["supergroup"]
       this.loading = loading
     })
+  }
+
+  saveHero() {
+    this.apollo.mutate({
+      mutation: submitHero,
+      variables: {
+        name: this.hero.name,
+        alias: this.hero.alias,
+        supergroup_id: 5
+      }
+    }).subscribe(({ data }) => {
+      console.log('got data', data);
+    }),
+      error => {
+      console.log('there was an error sending the query', error);
+    }; 
   }
 
   public ngOnDestroy(): void {

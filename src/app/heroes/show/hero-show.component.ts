@@ -40,7 +40,7 @@ export class HeroShowComponent {
         }
       }
     ).subscribe(({data, loading}) => {
-      this.hero = data["superhero"]
+      this.hero = data["hero"]
       this.loading = loading
     })
   }

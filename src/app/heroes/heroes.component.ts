@@ -25,7 +25,7 @@ export class HeroesComponent implements OnInit {
         query: heroes,
       }
     ).subscribe(({data, loading}) => {
-      this.heroes = data["superheros"]
+      this.heroes = data["heros"]
       this.loading = loading
     })
   }

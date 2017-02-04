@@ -8,9 +8,9 @@ export const supergroup = gql`
       name
       leader
       location
-      superheroes {
+      heroes {
         id
-        name
+        alias
       }
     }
   }
@@ -24,3 +24,14 @@ export const supergroups = gql`
     }
   }
 `
+
+//new
+export const submitHero = gql`
+  mutation submitHero($name: String!, $alias: String!, $supergroup_id: ID) {
+    createHero(name: $name, alias: $alias, supergroup_id: $supergroup_id) {
+      name
+      alias
+      supergroup_id
+    }
+  }
+`;

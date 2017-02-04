@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 //show
 export const hero = gql`
   query hero($id: ID) {
-    superhero(id: $id) {
+    hero(id: $id) {
       id
       name
       alias
@@ -13,7 +13,7 @@ export const hero = gql`
 //list
 export const heroes = gql`
   query heroes {
-    superheros {
+    heros {
       id
       alias
     }
