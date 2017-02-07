@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription }      from 'rxjs/Subscription'
 import { Angular2Apollo }    from 'angular2-apollo'
-import { heroes } from './hero.model';
+import { heroes, deleteHero } from './hero.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -23,7 +23,7 @@ export class HeroesComponent implements OnInit {
     this.sub = this.apollo.watchQuery(
       {
         query: heroes,
-      }
+      },
     ).subscribe(({data, loading}) => {
       this.heroes = data["heros"]
       this.loading = loading
@@ -32,6 +32,21 @@ export class HeroesComponent implements OnInit {
 
   gotoDetail(hero: any): void {
     this.router.navigate(['/hero', hero.id]);
+  }
+
+  delete(hero: any) {
+    this.apollo.mutate({
+      mutation: deleteHero,
+      variables: {
+        id: hero.id,
+      }
+    }).subscribe(({ data }) => {
+      console.log('got data', data);
+      this.ngOnInit() //<!-- lazy hack
+    }),
+      error => {
+      console.log('there was an error sending the query', error);
+    }; 
   }
 
   public ngOnDestroy(): void {

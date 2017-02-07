@@ -1,7 +1,10 @@
 <h2>My Heroes</h2>
 <ul class="heroes">
   <li *ngFor="let hero of heroes"
-    (click)="gotoDetail(hero)">
-    <span class="badge">{{hero.id}}</span> {{hero.alias}}
+      [class.selected]="hero === selectedHero">
+    <span class="badge">{{hero.id}}</span>
+    <span>{{hero.alias}}</span>
+    <button class="delete"
+      (click)="delete(hero)">x</button>
   </li>
 </ul>

@@ -19,3 +19,12 @@ export const heroes = gql`
     }
   }
 `
+
+//delete
+export const deleteHero = gql`
+  mutation deleteHero($id: ID!) {
+    deleteHero(input: {id: $id}) {
+      hero { id }
+    }
+  }
+`;
