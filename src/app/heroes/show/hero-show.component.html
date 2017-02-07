@@ -3,3 +3,55 @@
   <p><strong>Real Name:</strong> {{hero.name}}</p>
   <button (click)="goBack()">Back</button>
 </div>
+
+<div>
+  <h2>Edit Hero</h2>
+
+  <form novalidate
+    [formGroup]="heroForm">
+    <!-- Name -->
+    <div 
+      class="form-group" 
+      [ngClass]="{'has-danger':!heroForm.controls['name'].valid && heroForm.controls['name'].touched}">
+      <input 
+        class="form-control"
+        placeholder="Name" 
+        type="text" 
+        id="name"
+        [formControl]="heroForm.controls['name']"
+        [(ngModel)]="name"
+        ngModel
+        required>
+        <div 
+          class="form-control-feedback"
+          *ngIf="heroForm.controls['name'].hasError('required') && heroForm.controls['name'].touched">Email is required.
+        </div>
+    </div><br>
+    <!-- Alias -->
+    <div 
+      class="form-group" 
+      [ngClass]="{'has-danger':!heroForm.controls['alias'].valid && heroForm.controls['alias'].touched}">
+      <input 
+        class="form-control"
+        placeholder="Alias" 
+        type="alias" 
+        id="alias"
+        [formControl]="heroForm.controls['alias']"
+        [(ngModel)]="alias"
+        required>
+        <div 
+          class="form-control-feedback"
+          *ngIf="heroForm.controls['alias'].hasError('required') && heroForm.controls['alias'].touched">Alias is required.
+        </div>
+    </div>
+    <!-- Submit -->
+    <div class="form-group">
+      <button 
+        type="submit" 
+        class="btn btn-login"
+        (click)="updateHero(name, alias)"
+        [disabled]="!heroForm.valid">Save
+      </button>
+    </div>
+  </form>
+</div>

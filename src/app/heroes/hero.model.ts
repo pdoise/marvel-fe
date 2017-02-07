@@ -19,6 +19,14 @@ export const heroes = gql`
     }
   }
 `
+//edit
+export const updateHero = gql`
+  mutation updateHero($id: Int, $name: String!, $alias: String!) {
+    updateHero(input: {id: $id, name: $name, alias: $alias}) {
+      hero { id }
+    }
+  }
+`;
 
 //delete
 export const deleteHero = gql`

@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params }   from '@angular/router';
 import { Location }                 from '@angular/common';
 import { Subscription }      from 'rxjs/Subscription'
 import { Angular2Apollo }    from 'angular2-apollo'
 
-import { hero } from '../hero.model';
+import { hero, updateHero } from '../hero.model';
 
 import 'rxjs/add/operator/switchMap';
 
@@ -15,16 +16,22 @@ import 'rxjs/add/operator/switchMap';
 })
 
 export class HeroShowComponent {
-  hero :any;
-  loading  :boolean = true
+  hero :any = {};
+  private loading  :boolean = true
   private sub :Subscription
   private id :number
+  private heroForm :FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private apollo: Angular2Apollo,
-    private location: Location
-  ) {}
+    private location: Location,
+    private __fb: FormBuilder) {
+      this.heroForm = __fb.group({
+        'name' : [null, Validators.required],
+        'alias': [null, Validators.required]
+      }) 
+  }
 
   ngOnInit() {
 
@@ -43,6 +50,24 @@ export class HeroShowComponent {
       this.hero = data["hero"]
       this.loading = loading
     })
+  }
+
+  updateHero(name: string, alias: string) {
+    console.log(this.hero)
+    this.apollo.mutate({
+      mutation: updateHero,
+      variables: {
+        id: this.hero.id,
+        name: name,
+        alias: alias,
+      }
+    }).subscribe(({ data }) => {
+      console.log('got data', data);
+      this.ngOnInit() //<!-- lazy hack
+    }),
+      error => {
+      console.log('there was an error sending the query', error);
+    }; 
   }
 
   public ngOnDestroy(): void {
