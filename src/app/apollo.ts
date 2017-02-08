@@ -1,4 +1,4 @@
-import { ApolloModule }                         from 'angular2-apollo'
+import { ApolloModule } from 'apollo-angular';
 import ApolloClient, { createNetworkInterface } from 'apollo-client'
 import { environment }                          from '../environments/environment'
 

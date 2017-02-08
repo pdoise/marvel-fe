@@ -5,6 +5,8 @@
     <span class="badge">{{hero.id}}</span>
     <span>{{hero.alias}}</span>
     <button class="delete"
-      (click)="delete(hero)">x</button>
+      (click)="delete(hero); $event.stopPropagation()">x</button>
   </li>
 </ul>
+
+<button (click)="refetch()">Refresh</button>

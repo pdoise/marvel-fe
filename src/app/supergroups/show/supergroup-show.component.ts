@@ -3,7 +3,7 @@ import { ActivatedRoute, Params }   from '@angular/router';
 import { Location }                 from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription }      from 'rxjs/Subscription'
-import { Angular2Apollo }    from 'angular2-apollo'
+import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 
 import { supergroup, createHero } from '../supergroups.model';
 
@@ -19,13 +19,15 @@ export class SupergroupShowComponent {
   supergroup :any;
   hero :any = {};
   loading  :boolean = true
-  private sub :Subscription
   private id :number
   private heroForm : FormGroup;
+  private superGroupSub: Subscription;
+  private superGroupObs: ApolloQueryObservable<any>;
+  private routeSub :Subscription
 
   constructor(
     private route: ActivatedRoute,
-    private apollo: Angular2Apollo,
+    private apollo: Apollo,
     private location: Location,
     private __fb: FormBuilder) {
       this.heroForm = __fb.group({
@@ -36,23 +38,26 @@ export class SupergroupShowComponent {
 
   ngOnInit() {
 
-    this.sub = this.route.params.subscribe(params => {
+    this.routeSub = this.route.params.subscribe(params => {
       this.id = +params['id'];
     });
 
-    this.apollo.watchQuery(
+     // Fetch
+    this.superGroupObs = this.apollo.watchQuery(
       {
         query: supergroup,
-        pollInterval: 20000,
         variables: {
           id: this.id
         },
         forceFetch: true,
       }
-    ).subscribe(({data, loading}) => {
+    );
+
+    // Subscribe
+    this.superGroupSub = this.superGroupObs.subscribe(({data, loading}) => {
       this.supergroup = data["supergroup"]
       this.loading = loading
-    })
+    });
   }
 
   createHero() {
@@ -65,18 +70,20 @@ export class SupergroupShowComponent {
       }
     }).subscribe(({ data }) => {
       console.log('got data', data);
-      this.ngOnInit() //<!-- lazy hack
+      this.refetch()
     }),
       error => {
       console.log('there was an error sending the query', error);
     }; 
   }
 
-  public ngOnDestroy(): void {
-    this.sub.unsubscribe();
+  public refetch(): void {
+    this.superGroupObs.refetch();
   }
 
-  goBack(): void {
-    this.location.back();
+  public ngOnDestroy(): void {
+    this.superGroupSub.unsubscribe();
+    this.routeSub.unsubscribe();
   }
+
 }

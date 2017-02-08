@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription }      from 'rxjs/Subscription'
-import { Angular2Apollo }    from 'angular2-apollo'
+import { Apollo, ApolloQueryObservable }    from 'apollo-angular';
 
 import { supergroups } from './supergroups.model';
 
@@ -9,27 +9,32 @@ import { supergroups } from './supergroups.model';
   templateUrl: './supergroups.component.html',
   styleUrls: ['./supergroups.component.css']
 })
-export class SupergroupsComponent implements OnInit {
+export class SupergroupsComponent implements OnInit, OnDestroy {
 
-  supergroups :any;
-  loading  :boolean = true
-  private sub: Subscription
+  public supergroups :any;
+  public loading  :boolean = true
+  private superGroupSub: Subscription;
+  private superGroupObs: ApolloQueryObservable<any>;
 
-  constructor(private apollo: Angular2Apollo) { }
+  constructor(private apollo: Apollo) { }
 
   ngOnInit() {
-    this.sub = this.apollo.watchQuery(
-      {
-        query: supergroups,
-      }
-    ).subscribe(({data, loading}) => {
+    
+    // Fetch
+    this.superGroupObs = this.apollo.watchQuery({
+      query: supergroups,
+      forceFetch: true,
+    });
+
+    // Subscribe
+    this.superGroupSub = this.superGroupObs.subscribe(({data, loading}) => {
       this.supergroups = data["supergroups"]
       this.loading = loading
-    })
+    });
   }
 
   public ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.superGroupSub.unsubscribe();
   }
 
 }

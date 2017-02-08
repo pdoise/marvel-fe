@@ -12,8 +12,8 @@ export const hero = gql`
 `
 //list
 export const heroes = gql`
-  query heroes {
-    heros {
+  query heroes($limit: Int) {
+    heros(limit: $limit) {
       id
       alias
     }

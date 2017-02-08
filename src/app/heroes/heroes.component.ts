@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription }      from 'rxjs/Subscription'
-import { Angular2Apollo }    from 'angular2-apollo'
-import { heroes, deleteHero } from './hero.model';
+import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import { Router } from '@angular/router';
+
+import { heroes, deleteHero } from './hero.model';
 
 @Component({
   selector: 'app-heroes',
@@ -10,28 +11,32 @@ import { Router } from '@angular/router';
   styleUrls: ['./heroes.component.css']
 })
 
-export class HeroesComponent implements OnInit {
-  heroes :any;
-  loading  :boolean = true
-  private sub: Subscription
+export class HeroesComponent implements OnInit, OnDestroy {
+  public heroes: any;
+  public loading: boolean = true;
+  private itemsPerPage: number = 10;
+  private heroSub: Subscription;
+  private heroObs: ApolloQueryObservable<any>;
 
   constructor(
-    private apollo: Angular2Apollo,
+    private apollo: Apollo,
   	private router: Router) { }
 
-  ngOnInit() {
-    this.sub = this.apollo.watchQuery(
-      {
-        query: heroes,
+  public ngOnInit(): void {
+    // Fetch
+    this.heroObs = this.apollo.watchQuery({
+      query: heroes,
+      variables: {
+        limit: this.itemsPerPage
       },
-    ).subscribe(({data, loading}) => {
-      this.heroes = data["heros"]
-      this.loading = loading
-    })
-  }
+      forceFetch: true,
+    });
 
-  gotoDetail(hero: any): void {
-    this.router.navigate(['/hero', hero.id]);
+    // Subscribe
+    this.heroSub = this.heroObs.subscribe(({data, loading}) => {
+      this.heroes = data["heros"];
+      this.loading = loading;
+    });
   }
 
   delete(hero: any) {
@@ -42,14 +47,22 @@ export class HeroesComponent implements OnInit {
       }
     }).subscribe(({ data }) => {
       console.log('got data', data);
-      this.ngOnInit() //<!-- lazy hack
+      this.refetch();
     }),
       error => {
       console.log('there was an error sending the query', error);
     }; 
   }
 
+  gotoDetail(hero: any): void {
+    this.router.navigate(['/hero', hero.id]);
+  }
+
+  public refetch(): void {
+    this.heroObs.refetch();
+  }
+
   public ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.heroSub.unsubscribe();
   }
 }
